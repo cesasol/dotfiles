@@ -1,0 +1,15 @@
+# vim: filetype=hyprlang
+$mod = SUPER
+
+#- Programs
+$menu = rofi -show drun -run-command "uwsm-app -- {cmd}"
+$term = uwsm-terminal
+$exit = uwsm stop
+
+#- Monitors
+$mon_gigabyte = GIGA-BYTE TECHNOLOGY CO. LTD. M32UC 23510B005291
+$mon_dell_1 = Dell Inc. DELL S2721HN 76CNSJ3
+$mon_dell_2 = Dell Inc. DELL S2721HN F8CNSJ3
+$mon_lg_1 = LG Electronics LG ULTRAWIDE 409NTBK39357
+
+
