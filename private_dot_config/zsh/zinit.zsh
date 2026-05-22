@@ -29,6 +29,8 @@ zinit load chisui/zsh-nix-shell
 zinit ice wait'0a' lucid id-as'eth-p/bat-extras/batman' has'batman' eval'batman --export-env'
 zinit load @zdharma-continuum/null
 
+
+
 # fzf tab
 #zinit for \
 #  nocompile \
@@ -46,13 +48,19 @@ zinit load junegunn/fzf
 zinit ice wait'0a' lucid  has'git' has'fzf'
 zinit load wfxr/forgit
 
+zinit ice wait nocompile lucid id-as'navi-widget' has'navi' eval'navi widget zsh'
+zinit load @zdharma-continuum/null
+
+zinit ice wait nocompile lucid id-as'fnm-eval' has'fnm' eval'fnm env'
+zinit load @zdharma-continuum/null
+
 # Start pay-respects completions
 zinit ice wait'0a' nocompile lucid id-as"pay-respects-completions" has"pay-respects" eval"pay-respects zsh"
 zinit load @zdharma-continuum/null
 
 # Infisical CLI
 zinit ice from'gh-r' \
-  atclone"cp -vf manpages/infisical.1.gz $ZINIT[MAN_DIR]/man1;
+  atpull"cp -vf manpages/infisical.1.gz $ZINIT[MAN_DIR]/man1;
           cp -vf completions/infisical.zsh _infisical" \
   as'program' \
   sbin'infisical'
@@ -69,8 +77,11 @@ zinit load z-shell/zsh-eza
 zinit ice wait'0a' lucid id-as'broot-fn' has'broot' eval'broot --print-shell-function zsh'
 zinit load @zdharma-continuum/null
 
+zinit ice wait lucid id-as'zoxide' has'zoxide' eval'zoxide init zsh --cmd=x'
+zinit load @zdharma-continuum/null
+
 # PNPM completion
-zi wait'0a' lucid for \
+zinit wait'0a' lucid for \
   has'pnpm' \
   has'curl' \
   id-as'pnpm-shell-completion' \
@@ -83,10 +94,15 @@ typeset -i C_PROMPT
 export C_PROMPT=2
 
 if [[ "${TERM##*-}" = 256color ]] || [[ ${terminfo[colors]:?} -gt 255  ]]; then
- # ~/.config/zsh/.p10k.zsh.
- zinit ice wait"!" depth'1' \
+
+zinit ice wait"!" depth'1' \
    atload"source ~/.config/zsh/.p10k.zsh; _p9k_precmd" nocd
- zinit light romkatv/powerlevel10k
+zinit light romkatv/powerlevel10k
+# ── Starship Prompt ──
+# zinit ice wait"!" id-as"starship" has"starship" eval"starship init zsh" run-atpull
+# zinit light @zdharma-continuum/null
+# zinit light spaceship-prompt/spaceship-prompt
+
 else
   # Load pure for not so good terminals
   zinit ice lucid nocd \

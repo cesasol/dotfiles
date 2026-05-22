@@ -1,0 +1,5 @@
+{
+  "layer": "bottom",
+  "passthrough": true,
+  "mode": "overlay"
+}

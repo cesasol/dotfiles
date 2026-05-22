@@ -1,0 +1,82 @@
+{
+  "id": "bar-bottom",
+  "ipc": true,
+  "position": "bottom",
+  "name": "bar-bottom",
+  "fixed-center": true,
+  "include": [],
+  "height": 24,
+  "modules-left": [
+    "wlr/taskbar"
+  ],
+  "modules-center": [
+    "memory",
+    "cpu",
+    "disk#root"
+  ],
+  "modules-right": [
+    "gamemode",
+    "temperature#cpu",
+    "temperature#gpu",
+    "systemd-failed-units",
+  ],
+  "temperature#cpu": {
+    "thermal-zone": 0,
+    "hwmon-path": "/sys/class/hwmon/hwmon5/temp1_input",
+    "format": "[CPU {temperatureC}°C ]"
+  },
+  "temperature#gpu": {
+    "thermal-zone": 0,
+    "hwmon-path": "/sys/class/hwmon/hwmon5/temp4_input",
+    "format": "[GPU {temperatureC}°C ]"
+  },
+  "disk#root": {
+    "path": "/",
+    "format": "[ {percentage_used:2}%]",
+    "states": {
+      "warning": 90,
+      "critical": 98
+    }
+  },
+  "systemd-failed-units": {
+    "hide-on-ok": true, // Do not hide if there is zero failed units.
+    "format": "✗ {nr_failed}",
+    "format-ok": "✓",
+    "system": true, // Monitor failed systemwide units.
+    "user": true // Ignore failed user units.
+  },
+  "memory": {
+    "interval": 5,
+    "format": "[  {}%]"
+  },
+  "cpu": {
+    "interval": 5,
+    "format": "[\uf4bc {usage:2}%]"
+  },
+  "wlr/taskbar": {
+    "markup": false,
+    "format": "{icon} {title:.15}",
+    "icon-size": 12,
+    "icon-theme": "Papirus",
+    "tooltip-format": "{title}",
+    "on-click": "activate",
+    "on-click-middle": "close",
+    "ignore-list": [],
+    "app_ids-mapping": {},
+    "rewrite": {
+      "Firefox Web Browser": "Firefox",
+    }
+  },
+  "gamemode": {
+    "format": "{glyph}",
+    "format-alt": "{glyph} {count}",
+    "glyph": "",
+    "hide-not-running": true,
+    "use-icon": true,
+    "icon-name": "input-gaming-symbolic",
+    "icon-spacing": 4,
+    "icon-size": 20,
+    "tooltip": true,
+    "tooltip-format": "Games running: {count}"
+  }
+}

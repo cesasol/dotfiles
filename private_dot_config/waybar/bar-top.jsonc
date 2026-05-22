@@ -1,0 +1,38 @@
+{
+  // Identity
+  "id": "bar-top",
+  "name": "Bar--Top",
+  "ipc": true,
+  // Place and size
+  "position": "top",
+  "spacing": 4,
+  "fixed-center": true,
+  // Include a bot
+  "modules-left": [
+    "hyprland/workspaces"
+  ],
+  "modules-center": [
+    "mpris"
+  ],
+  "modules-right": [
+    "wireplumber",
+    "privacy",
+    "idle_inhibitor",
+    "bluetooth",
+    "network",
+    "power-profiles-daemon",
+    "clock",
+  ],
+  "include": [
+    "$XDG_CONFIG_HOME/waybar/_hyprland-workspaces.jsonc",
+    "$XDG_CONFIG_HOME/waybar/_network.jsonc",
+    "$XDG_CONFIG_HOME/waybar/_mpris.jsonc",
+    "$XDG_CONFIG_HOME/waybar/_idle-inhibitor.jsonc",
+    "$XDG_CONFIG_HOME/waybar/_privacy.jsonc",
+    "$XDG_CONFIG_HOME/waybar/_wireplumber.jsonc",
+    "$XDG_CONFIG_HOME/waybar/_bluetooth.jsonc",
+    "$XDG_CONFIG_HOME/waybar/_clock.jsonc",
+    "$XDG_CONFIG_HOME/waybar/_power-profiles-daemon.jsonc",
+    "$XDG_CONFIG_HOME/waybar/_tray.jsonc"
+  ]
+}

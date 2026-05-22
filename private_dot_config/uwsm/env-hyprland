@@ -1,0 +1,15 @@
+export TERMINAL=kitty
+
+# Debug
+# export HYPRLAND_TRACE=1
+
+# Allow gamescope
+# export xx_color_management_v4=true
+
+# Use IGPU
+# export AQ_DRM_DEVICES="/dev/dri/card2:/dev/dri/card1"
+export AQ_DRM_DEVICES="/dev/dri/card2"
+# Disables explicit syncing on mgpu buffers
+# export AQ_MGPU_NO_EXPLICIT=1
+# export HYPRCURSOR_SIZE=24
+

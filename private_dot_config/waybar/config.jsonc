@@ -1,0 +1,24 @@
+// -*- mode: jsonc -*-
+[
+  {
+    "include": "$XDG_CONFIG_HOME/waybar/bar-top-large.jsonc",
+    "output": [
+      "DP-1",
+      "DP-2",
+      "DP-3"
+    ]
+  },
+  {
+    "include": "$XDG_CONFIG_HOME/waybar/bar-top-small.jsonc",
+    "output": [
+      "HDMI-A-1",
+      "HDMI-A-3"
+    ]
+  },
+  {
+    "include": "$XDG_CONFIG_HOME/waybar/bar-top.jsonc",
+    "output": [
+      "HDMI-A-2"
+    ]
+  }
+]

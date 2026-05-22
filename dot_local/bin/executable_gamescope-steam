@@ -1,0 +1,30 @@
+#!/bin/zsh
+
+
+
+declare -aLU GAMESCOPE_ARG=(
+  "--ready-fd"
+  "--fullscreen"
+  "--steam"
+  "--filter fsr"
+  "--rt"
+  "--nested-unfocused-refresh 30"
+  "--adaptive-sync"
+  "--fullscreen"
+  "--grab"
+)
+if [[ hyprctl ]]; then
+  SIZE="$(hyprctl monitors -j | jq '.[] | select((.disabled == false) and (.transform == 0)) | {width, height, scale, refreshRate}')"
+  W=$(echo $SIZE | jq '.width')
+  H=$(echo $SIZE | jq '.height')
+  S=$(echo $SIZE | jq '.scale')
+  R=$(echo $SIZE | jq '.refreshRate')
+
+  GAMESCOPE_ARG+=("--output-width $W")
+  GAMESCOPE_ARG+=("--output-height $H")
+  GAMESCOPE_ARG+=("--max-scale $S")
+  GAMESCOPE_ARG+=("--nested-refresh $R")
+fi
+# gamescope --ready-fd --fullscreen --steam --output-width 3440 --output-height 1440 --nested-refresh 100 --max-scale 2 --filter fsr --rt --prefer-vk-device "1002:744c" --nested-unfocused-refresh 30 --fullscreen ~--grab -- steam -fulldesktopres -tenfoot 
+gamescope $(echo ${(@)GAMESCOPE_ARG}) -- steam  -fulldesktopres -tenfoot
+

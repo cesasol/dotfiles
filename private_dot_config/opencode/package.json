@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@code-yeongyu/comment-checker": "^0.7.0",
+    "@opencode-ai/plugin": "1.4.3",
+    "oh-my-openagent": "^3.16.0"
+  },
+  "trustedDependencies": [
+    "@ast-grep/cli",
+    "@code-yeongyu/comment-checker",
+    "oh-my-openagent",
+    "oh-my-opencode"
+  ]
+}

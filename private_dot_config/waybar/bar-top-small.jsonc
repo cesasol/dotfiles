@@ -1,0 +1,25 @@
+// -*- mode: jsonc -*-
+{
+  // Identity
+  "id": "bar-top-small",
+  "name": "Bar--Top-Small",
+  "ipc": true,
+  // Place and size
+  "position": "top",
+  "spacing": 0,
+  "fixed-center": false,
+  // Include a bot
+  "modules-left": [
+    "hyprland/workspaces"
+  ],
+  "modules-center": [],
+  "modules-right": [
+    "privacy",
+    "clock"
+  ],
+  "include": [
+    "$XDG_CONFIG_HOME/waybar/_hyprland-workspaces.jsonc",
+    "$XDG_CONFIG_HOME/waybar/_privacy.jsonc",
+    "$XDG_CONFIG_HOME/waybar/_clock.jsonc"
+  ]
+}

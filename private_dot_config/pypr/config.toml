@@ -1,0 +1,56 @@
+[pyprland]
+plugins = [
+  "wallpapers",
+  "shortcuts_menu",
+  "scratchpads",
+  "magnify",
+  "toggle_special",
+  "fetch_client_menu",
+]
+
+[expose]
+include_special = false
+
+[scratchpads.term]
+animation = "fromTop"
+command = "uwsm app -t scope -u tmuxdropterm.scope -d \"Dropterm with tmux\" kitty -- --class tmux-dropterm"
+class = "tmux-dropterm"
+size = "100% 60%"
+
+[scratchpads.volume]
+animation = "fromRight"
+command = "pavucontrol"
+class = "org.pulseaudio.pavucontrol"
+lazy = true
+size = "40% 90%"
+unfocus = "hide"
+
+[wallpapers]
+path = "~/Pictures/Wallpapers"
+unique = true
+interval = 60
+recurse = true
+# command = "hyprctl hyprpaper load '[output],[file]'"
+command = 'swww img --transition-type any "[file]"'
+
+
+# https://github.com/fdev31/wlr-layout-ui
+[monitors]
+hotplug_command = "notify-send plugged-in"
+unknown = "wlrlui"
+
+# Dell Inc. DELL S2721HN 76CNSJ3
+[monitors.placement.S2721HN]
+leftCenterOf = "76CNSJ3"
+
+# Dell Inc. DELL S2721HN 76CNSJ3
+[monitors.placement.76CNSJ3]
+leftCenterOf = "GIGA-BYTE"
+transform = 3
+
+# GIGA-BYTE TECHNOLOGY CO. LTD. M32UC 23510B005291
+[monitors.placement.GIGA-BYTE]
+righCenterOf = "DELL"
+scale = 1.6
+rate = 100
+

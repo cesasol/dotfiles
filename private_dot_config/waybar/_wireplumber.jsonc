@@ -1,0 +1,37 @@
+{
+  "wireplumber": {
+    "format": "{icon} {volume}%",
+    "format-bluetooth": "󰂰 ",
+    "format-muted": " ",
+    "format-icons": {
+      "headphone": " ",
+      "hands-free": " ",
+      "headset": "󰋎 ",
+      "phone": "󰄜",
+      "phone-muted": "󰥐 ",
+      "portable": "󰦢 ",
+      "car": "󰄍 ",
+      "default": [
+        " ",
+        " "
+      ]
+    }
+  },
+  "wireplumber#source": {
+    "node-type": "Audio/Source",
+    "format": "{volume}% 󰍬",
+    "format-muted": "󰍭",
+    "on-click": "hyprpwcenter",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "scroll-step": 5,
+  },
+  "wireplumber#sink": {
+    "node-type": "Audio/Sink",
+    "format": "{volume}% {icon}",
+    "format-muted": "",
+    "format-icons": ["", "", ""],
+    "on-click": "hyprpwcenter",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "scroll-step": 5,
+  },
+}

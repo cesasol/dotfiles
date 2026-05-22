@@ -1,0 +1,17 @@
+{
+  "mpris": {
+    "format": "{status_icon} {title}",
+    "format-paused": "{status_icon} <i>{title}</i>",
+    "title-len": 30,
+    "player-icons": {
+      "default": "",
+      "firefox": "",
+      "mpv": "󰦚"
+    },
+    "status-icons": {
+      "playing": "[]",
+      "paused": "[]",
+      "stopped": "[]"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+// -*- mode: jsonc -*-
+{
+  // Identity
+  "id": "top-small",
+  "name": "Bar--Top-Small",
+  "ipc": true,
+  // Place and size
+  "position": "top",
+  "height": 24,
+  "spacing": 0,
+  "fixed-center": false,
+  // Make this an overlay
+  "include": "./overlay.jsonc",
+  "modules-left": [
+    "hyprland/workspaces"
+  ],
+  "modules-center": [
+    "mpris"
+  ],
+  "modules-right": [
+    "tray",
+    "clock"
+  ]
+}

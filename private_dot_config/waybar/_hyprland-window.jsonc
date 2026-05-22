@@ -1,0 +1,15 @@
+{
+  "hyprland/window": {
+    "format": "{}",
+    "offscreen-css": true,
+    "max-length": 40,
+    "separate-outputs": false,
+    "icon": true,
+    "icon-size": 16,
+    "on-click": "",
+    "rewrite": {
+      "(.*) (— Firefox Developer Edition)": "$1",
+      "kitty": "  [$1]"
+    }
+  }
+}

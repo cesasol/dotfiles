@@ -1,0 +1,31 @@
+{
+  "hyprland/workspaces": {
+    "active-only": false,
+    "all-outputs": false,
+    "disable-scroll": false,
+    "show-special": true,
+    "special-visible-only": false,
+    "format-window-separator": " | ",
+    "format": "{icon} <b>{name}</b> {windows}",
+    "window-rewrite-default": "",
+    "persistent-workspaces": {},
+    "window-rewrite": {
+      "class<thunderbird>": "",
+      "class<obsidian>": "󰹕",
+      "title<.*youtube.*>": "", // Windows whose titles contain "youtube"
+      "title<.*firefox.*>": "", // Windows whose classes are "firefox"
+      "kitty": "",
+      "class<code|dev.zed.Zed>": "󰨞",
+      "class<dev.zed.Zed>": "",
+      "title<*Lapce>": "",
+      "class<org.telegram.desktop>": ""
+    },
+    "format-icons": {
+      "urgent": "",
+      "active": "", // focused workspace on current monitor
+      "visible": "󰺕", // focused workspace on other monitors
+      "default": "",
+      "empty": "" // persistent (created by this plugin)
+    }
+  }
+}
