@@ -1,15 +1,28 @@
-setopt prompt_subst
-setopt extended_glob
+#!/bin/zsh
+# ── .zshrc ──
+# Sourced for interactive shells only.
+# Bootstraps zinit, then loads configuration and plugins.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Zinit Bootstrap
+# ═══════════════════════════════════════════════════════════════════════════════
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+
+# Clone zinit if not already present.
+if [[ ! -d "$ZINIT_HOME/.git" ]]; then
+  mkdir -p "$(dirname "$ZINIT_HOME")"
+  git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+
 source "${ZINIT_HOME}/zinit.zsh"
 
-source $ZDOTDIR/config.zsh
-source $ZDOTDIR/zinit.zsh
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Load Modular Configs
+# ═══════════════════════════════════════════════════════════════════════════════
+
+source "${ZDOTDIR}/config.zsh"  # Options, history, zstyle, completions
+source "${ZDOTDIR}/zinit.zsh"   # Plugins and prompt
 
 
-
-# bun completions
-[ -s "/home/cesasol/.local/share/bun/_bun" ] && source "/home/cesasol/.local/share/bun/_bun"

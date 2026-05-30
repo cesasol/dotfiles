@@ -1,61 +1,43 @@
 #!/bin/zsh
+# ── .zshenv ──
+# Sourced by ALL zsh invocations (login, interactive, scripts).
+# Keep this minimal: environment variables and PATH only.
+
+# Prevent the global compinit that some distros (e.g. Ubuntu) run in /etc/zsh/zshrc.
+# Zinit handles compinit itself later.
 skip_global_compinit=1
 
-# XDG data dirs
-if [[ $OSTYPE =~ "linux" ]]; then
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# XDG Base Directories
+# ═══════════════════════════════════════════════════════════════════════════════
+
+if [[ $OSTYPE == linux* ]]; then
   export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
-elif [[ $OSTYPE =~ "darwin" ]]; then
-  # TODO: Implement missing xdg paths for mac
+elif [[ $OSTYPE == darwin* ]]; then
+  # macOS: follow Unix convention for cache, keep config/state under ~/.local
   export XDG_CACHE_HOME="${HOME}/Library/Caches"
 fi
+
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
-export XDG_STATE_HOME="${XDG_DATA_HOME:-${HOME}/.local/state}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Core Environment
+# ═══════════════════════════════════════════════════════════════════════════════
 
 export EDITOR=nvim
-# Setting VISUAL disrupts my workflow
-# export VISUAL=nvim
+# export VISUAL=nvim  # Left unset — VISUAL can interfere with tools that expect a GUI editor
 
-# Homes for other tools
-export PNPM_HOME="$XDG_DATA_HOME/pnpm"
-export IPFS_PATH="$XDG_DATA_HOME/ipfs"
-export NVM_DIR="$XDG_DATA_HOME/nvm"
-export BUN_INSTALL="$XDG_DATA_HOME/bun"
+export LANG=en_CA.UTF-8
+export LC_MONETARY=es_MX.UTF-8
 
-# PATHS
-# Make sure all paths are unique arrays and exported
-typeset -agUx cdpath fpath mailpath path manpath
 
-# Manuals paths
-manpath=(
-  "/usr/share/man"
-  "/usr/local/man"
-  $manpath
-)
+# ═══════════════════════════════════════════════════════════════════════════════
+# XDG User Directories
+# ═══════════════════════════════════════════════════════════════════════════════
 
-# All binaries path
-# (N) makes sure that the path exists before appending
-path=(
-  $HOME/{,s}bin(N)
-  $HOME/.local/{,s}bin(N)
-  $XDG_CONFIG_HOME/composer/vendor/bin(N)
-  $XDG_DATA_HOME/bun/bin(N)
-  $XDG_DATA_HOME/share/JetBrains/Toolboox/scripts(N)
-  /opt/{homebrew,local}/{,s}bin(N)
-  /usr/local/{,s}bin(N)
-  $path
-)
-
-# Browser
-if [[ "$OSTYPE" == darwin* ]]; then
-  export BROWSER='open'
-elif (( $+commands[handlr] )); then
-  export BROWSER='handlr open'
-else
-  export BROWSER="xdg-open"
-fi
-
-# User dirs.
 export XDG_DESKTOP_DIR="$HOME/Desktop"
 export XDG_DOWNLOAD_DIR="$HOME/Downloads"
 export XDG_TEMPLATES_DIR="$HOME/Templates"
@@ -65,70 +47,123 @@ export XDG_MUSIC_DIR="$HOME/Music"
 export XDG_PICTURES_DIR="$HOME/Pictures"
 export XDG_VIDEOS_DIR="$HOME/Videos"
 
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # History
+# ═══════════════════════════════════════════════════════════════════════════════
+
 export HISTSIZE=10000
-export SAVEHIST="$HISTSIZE"
+export SAVEHIST=$HISTSIZE
 export HISTFILE="${XDG_STATE_HOME}/zsh_history"
 
-# ZSH Config dirs
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Zsh Configuration Paths
+# ═══════════════════════════════════════════════════════════════════════════════
+
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
-# If ZSH is not defined, use the current script's directory.
 [[ -n "$ZSH" ]] || export ZSH="${${(%):-%x}:a:h}"
-ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh"
+export ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh"
 
-# You may need to manually set your language environment
-export LANG=en_CA.UTF-8 # I don't like imperial stuff
-export LC_MONETARY=es_MX.UTF-8 # This is the only that matters in my country
 
-export PAGER="less" # Maybe most
+# ═══════════════════════════════════════════════════════════════════════════════
+# Pager
+# ═══════════════════════════════════════════════════════════════════════════════
+
+export PAGER="less"
 export LESS='-g -i -M -R -S -w -X -z-4'
+
 if [[ -z "$LESSOPEN" ]] && (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
+
 export BAT_PAGER="$PAGER"
 export BATPIPE=color
 export BATPIPE_ENABLE_COLOR=true
 
-# Go
-[ -d "$HOME/go/bin" ] && {
-    path+=("$HOME/go/bin")
-}
 
-# Luarocks bin path
-[ -d ${HOME}/.luarocks/bin ] && {
-    path+=("${HOME}/.luarocks/bin")
-}
+# ═══════════════════════════════════════════════════════════════════════════════
+# Browser
+# ═══════════════════════════════════════════════════════════════════════════════
 
-# Added by LM Studio CLI (lms)
-[ -d ${HOME}/.lmstudio/bin ] && {
-    path+=("$HOME/.lmstudio/bin")
-}
-
-# Cargo
-[ -d $HOME/.cargo/bin ] && {
-    path+=($HOME/.cargo/bin)
-}
-
-# PNPM
-[ -d $PNPM_HOME ] && {
-  path+=("$PNPM_HOME")
-}
+if [[ "$OSTYPE" == darwin* ]]; then
+  export BROWSER='open'
+elif (( $+commands[handlr] )); then
+  export BROWSER='handlr open'
+else
+  export BROWSER="xdg-open"
+fi
 
 
-# Crypto
-[ -d "$HOME/.local/share/solana/install/active_release/bin" ] && {
-    path+=("$HOME/.local/share/solana/install/active_release/bin")
-}
-[ -d "$HOME/.config/.foundry/bin" ] && {
-    path+=("$HOME/.config/.foundry/bin")
-}
+# ═══════════════════════════════════════════════════════════════════════════════
+# Tool Homes (XDG-compliant where possible)
+# ═══════════════════════════════════════════════════════════════════════════════
 
-# GIT utilities defaults
+export PNPM_HOME="$XDG_DATA_HOME/pnpm"
+export IPFS_PATH="$XDG_DATA_HOME/ipfs"
+export NVM_DIR="$XDG_DATA_HOME/nvm"
+export BUN_INSTALL="$XDG_DATA_HOME/bun"
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PATH
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Ensure these arrays are unique and exported.
+#
+#   -a  array
+#   -g  global (not scoped to a function)
+#   -U  keep only the first occurrence of each value (unique)
+#   -x  export to child processes
+#
+# This guarantees that PATH-like variables never grow duplicates when
+# .zshenv is sourced multiple times (e.g. nested shells, tmux panes).
+typeset -agUx cdpath fpath mailpath path manpath
+
+# ── System man pages ──
+manpath=(
+  /usr/share/man
+  /usr/local/man
+  $manpath
+)
+
+# ── System man pages ──
+fpath+=($XDG_DATA_HOME/zsh/site-functions)
+
+# ── Core user binaries ──
+# The (N) glob qualifier silently skips non-existent paths.
+path=(
+  $HOME/{,s}bin(N)
+  $HOME/.local/{,s}bin(N)
+  /opt/{homebrew,local}/{,s}bin(N)
+  /usr/local/{,s}bin(N)
+  $path
+)
+
+# ── Language / package manager binaries ──
+[[ -d "$HOME/go/bin" ]]         && path+=("$HOME/go/bin")
+[[ -d "$HOME/.luarocks/bin" ]]  && path+=("$HOME/.luarocks/bin")
+[[ -d "$HOME/.cargo/bin" ]]     && path+=("$HOME/.cargo/bin")
+[[ -d "$BUN_INSTALL/bin" ]]     && path+=("$BUN_INSTALL/bin")
+[[ -d "$PNPM_HOME" ]]           && path+=("$PNPM_HOME/bin")
+[[ -d "$HOME/.lmstudio/bin" ]]  && path+=("$HOME/.lmstudio/bin")
+
+# ── JetBrains Toolbox scripts ──
+[[ -d "$XDG_DATA_HOME/share/JetBrains/Toolbox/scripts" ]] && \
+  path+=("$XDG_DATA_HOME/share/JetBrains/Toolbox/scripts")
+
+# ── Crypto / Web3 toolchains ──
+[[ -d "$HOME/.local/share/solana/install/active_release/bin" ]] && path+=("$HOME/.local/share/solana/install/active_release/bin")
+[[ -d "$HOME/.config/.foundry/bin" ]]                           && path+=("$HOME/.config/.foundry/bin")
+
+# ── Composer (PHP) ──
+[[ -d "$XDG_CONFIG_HOME/composer/vendor/bin" ]] && \
+  path+=("$XDG_CONFIG_HOME/composer/vendor/bin")
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Misc Tool Settings
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# grab: copy the path of the checked-out repo
 export GRAB_COPY_PATH=true
-
-export PATH;
-export CDPATH;
-export FPATH;
-export MAILPATH;
-export MANPATH;
-

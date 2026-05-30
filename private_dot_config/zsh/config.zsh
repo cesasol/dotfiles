@@ -1,49 +1,80 @@
-# https://wiki.zshell.dev/docs/guides/customization#zsh-option-setopt
+#!/bin/zsh
+# ── config.zsh ──
+# Core zsh options, history settings, and completion styling.
+# Sourced by .zshrc for interactive shells.
+#
+# Reference: https://wiki.zshell.dev/docs/guides/customization#zsh-option-setopt
 
-# Basic zsh
-[[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
 
-setopt extended_glob
-setopt dot_glob
-setopt prompt_subst
+# ═══════════════════════════════════════════════════════════════════════════════
+# Display
+# ═══════════════════════════════════════════════════════════════════════════════
 
-# History managment
-setopt append_history         # Allow multiple sessions to append to one Zsh command history.
-setopt extended_history       # Show timestamp in history.
-setopt hist_expire_dups_first # Expire A duplicate event first when trimming history.
-setopt hist_find_no_dups      # Do not display a previously found event.
-setopt hist_ignore_all_dups   # Remove older duplicate entries from history.
-setopt hist_ignore_dups       # Do not record an event that was just recorded again.
-setopt hist_ignore_space      # Do not record an Event Starting With A Space.
-setopt hist_reduce_blanks     # Remove superfluous blanks from history items.
-setopt hist_save_no_dups      # Do not write a duplicate event to the history file.
-setopt hist_verify            # Do not execute immediately upon history expansion.
-setopt inc_append_history     # Write to the history file immediately, not when the shell exits.
-setopt share_history          # Share history between different instances of the shell.
-setopt hist_beep              # Beep when accessing non-existent history.
+# Enable 24-bit truecolor support if the terminal claims it.
+[[ $COLORTERM == *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
 
-# Directory managment
-setopt auto_cd              # Use cd by typing directory name if it's not a command.
-setopt auto_list            # Automatically list choices on ambiguous completion.
-setopt auto_pushd           # Make cd push the old directory onto the directory stack.
-setopt bang_hist            # Treat the '!' character, especially during Expansion.
-setopt interactive_comments # Comments even in interactive shells.
-setopt multios              # Implicit tees or cats when multiple redirections are attempted.
-setopt no_beep              # Don't beep on error.
-setopt prompt_subst         # Substitution of parameters inside the prompt each time the prompt is drawn.
-setopt pushd_ignore_dups    # Don't push multiple copies directory onto the directory stack.
-setopt pushd_minus          # Swap the meaning of cd +1 and cd -1 to the opposite.
-setopt cdable_vars          # Change directory to a path stored in a variable.
 
-unsetopt clobber            # Do not overwrite existing files with > and >>.
-                            # Use >! and >>! to bypass.
+# ═══════════════════════════════════════════════════════════════════════════════
+# Globbing
+# ═══════════════════════════════════════════════════════════════════════════════
 
-# Zstyle
-# Fuzzy matching of completions
+setopt extended_glob  # Enable extended glob patterns: ^, ~, #, etc.
+setopt dot_glob       # Include hidden files in glob results.
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# History
+# ═══════════════════════════════════════════════════════════════════════════════
+
+setopt append_history         # Multiple sessions append to the same history file.
+setopt extended_history       # Record timestamp for each entry.
+setopt inc_append_history     # Write to file immediately, not on shell exit.
+setopt share_history          # Share history across concurrent shells.
+
+setopt hist_expire_dups_first # Trim oldest duplicates first when history overflows.
+setopt hist_find_no_dups      # Skip duplicate results during history search.
+setopt hist_ignore_all_dups   # Remove older duplicates when a new duplicate is added.
+setopt hist_ignore_dups       # Do not record the same command twice in a row.
+setopt hist_ignore_space      # Skip commands that start with a leading space.
+setopt hist_reduce_blanks     # Collapse unnecessary whitespace before saving.
+setopt hist_save_no_dups      # Avoid writing duplicate entries to the history file.
+setopt hist_verify            # Show expanded history before executing (safety net).
+setopt hist_beep              # Beep when a history search finds nothing.
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Directory Navigation
+# ═══════════════════════════════════════════════════════════════════════════════
+
+setopt auto_cd           # Type a directory name to cd into it.
+setopt auto_pushd        # cd pushes the old directory onto the stack.
+setopt pushd_ignore_dups # Avoid duplicate entries on the directory stack.
+setopt pushd_minus       # Reverse the meaning of cd +1 / cd -1.
+setopt cdable_vars       # cd into a path stored in a variable.
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Shell Behaviour
+# ═══════════════════════════════════════════════════════════════════════════════
+
+setopt prompt_subst         # Expand parameters inside $PS1 every redraw.
+setopt interactive_comments # Allow comments in interactive shell input.
+setopt multios              # Implicit tee/cat when multiple redirections are used.
+setopt no_beep              # Silent mode on errors.
+unsetopt clobber            # Require >! and >>! to overwrite existing files.
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Completion System (zstyle)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ── Fuzzy matching ──
 zstyle ':completion:*' completer _extensions _complete _match _approximate
 zstyle ':completion:*:match:*' original only
-zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
-#  Pretty completions
+zstyle -e ':completion:*:approximate:*' max-errors \
+  'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
+
+# ── Grouping & descriptions ──
 zstyle ':completion:*:matches' group 'yes'
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:options' auto-description '%d'
@@ -55,24 +86,35 @@ zstyle ':completion:*:default' list-prompt '%S%M matches%s'
 zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' verbose yes
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
+
+# ── Case-insensitive & partial-word matching ──
+zstyle ':completion:*' matcher-list \
+  'm:{a-zA-Z}={A-Za-z}' \
+  'r:|[._-]=* r:|=*' \
+  'l:|=* r:|=*'
+
+# ── Cache & rehash ──
 zstyle ':completion:*' use-cache true
 zstyle ':completion:*' rehash true
-# Do menu-driven completion
+
+# ── Menu selection ──
 zstyle ':completion:*' menu select
+
+# ── Function name filtering ──
+zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
+
+# ── sudo: preserve root env ──
 zstyle ':completion:*:sudo::' environ \
   PATH="/sbin:/usr/sbin:$PATH" HOME="/root"
 
-# Color completion for some things
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# ── Colorize completion lists (populated by LS_COLORS later) ──
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
-# Enable debug
-zstyle ":plugin:zgdbm" cppflags "-I/usr/local/include"  # Additional include directory
-zstyle ":plugin:zgdbm" cflags "-Wall -O2 -g"            # Additional CFLAGS
-zstyle ":plugin:zgdbm" ldflags "-L/usr/local/lib"       # Additional library directory
 
-# Less 
-export LESS=" -RF"
-export LESSOPEN="|/usr/bin/lesspipe.sh %s"
-export LESSCOLORIZER="bat --style=plain"
+# ═══════════════════════════════════════════════════════════════════════════════
+# Plugin Build Flags (zgdbm)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+zstyle ":plugin:zgdbm" cppflags "-I/usr/local/include"
+zstyle ":plugin:zgdbm" cflags "-Wall -O2 -g"
+zstyle ":plugin:zgdbm" ldflags "-L/usr/local/lib"
